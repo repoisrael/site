@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>StemRip Local</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Local AI stem separation</p>
+        <h1>StemRip Local</h1>
+        <p class="subcopy">Upload a track, split it into vocals, drums, bass, and other, then download the stems.</p>
+      </section>
+
+      <section class="panel">
+        <form id="jobForm" class="form">
+          <label class="dropzone" id="dropzone">
+            <input id="audioFile" name="file" type="file" accept="audio/*,.wav,.mp3,.flac,.m4a,.aac,.ogg,.opus,.aiff,.aif,.wma" required />
+            <span class="drop-title">Drop audio here or choose a file</span>
+            <span id="fileName" class="drop-subtitle">WAV, MP3, FLAC, M4A, AAC, OGG, OPUS, AIFF, WMA</span>
+          </label>
+
+          <div class="grid">
+            <label>
+              Separation mode
+              <select id="mode" name="mode">
+                <option value="four_stems" selected>4 stems: vocals, drums, bass, other</option>
+                <option value="vocals">2 stems: vocals + instrumental</option>
+                <option value="six_stems">6 stems: vocals, drums, bass, guitar, piano, other</option>
+              </select>
+            </label>
+
+            <label>
+              Model
+              <select id="model" name="model">
+                <option value="htdemucs" selected>htdemucs: default balanced</option>
+                <option value="htdemucs_ft">htdemucs_ft: higher quality, slower</option>
+                <option value="mdx_extra_q">mdx_extra_q: faster / smaller</option>
+                <option value="mdx_extra">mdx_extra</option>
+                <option value="htdemucs_6s">htdemucs_6s: 6-stem model</option>
+              </select>
+            </label>
+
+            <label>
+              Shifts
+              <input id="shifts" name="shifts" type="number" min="1" max="10" value="1" />
+              <small>Higher can sound better, but runs much slower.</small>
+            </label>
+          </div>
+
+          <button id="submitButton" type="submit">Separate stems</button>
+        </form>
+      </section>
+
+      <section id="jobPanel" class="panel hidden">
+        <div class="job-head">
+          <div>
+            <p class="eyebrow">Current job</p>
+            <h2 id="jobTitle">Waiting</h2>
+          </div>
+          <span id="statusBadge" class="badge">queued</span>
+        </div>
+
+        <div class="progress"><div id="progressBar"></div></div>
+        <p id="jobMeta" class="muted"></p>
+        <div id="downloads" class="downloads"></div>
+
+        <details open>
+          <summary>Process log</summary>
+          <pre id="logs"></pre>
+        </details>
+      </section>
+
+      <section class="fineprint">
+        <p>Run this only on audio you own or have permission to process. Stem separation is approximate and may include bleed or artifacts.</p>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
