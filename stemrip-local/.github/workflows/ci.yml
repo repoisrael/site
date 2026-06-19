@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install lightweight web dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install fastapi uvicorn[standard] python-multipart
+
+      - name: Python syntax check
+        working-directory: stemrip-local
+        run: python -m compileall app
+
+      - name: FastAPI import smoke test
+        working-directory: stemrip-local
+        run: |
+          python - <<'PY'
+          from app.main import app, health
+          assert app.title == "StemRip Local"
+          assert health()["status"] == "ok"
+          print("StemRip Local smoke test passed")
+          PY
